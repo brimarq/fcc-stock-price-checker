@@ -1,15 +1,19 @@
 'use strict';
+require('dotenv').config(); // comment-out on Glitch
+const express = require('express');
+const bodyParser = require('body-parser');
+const expect = require('chai').expect;
+const cors = require('cors');
+const helmet = require('helmet');
+const apiRoutes = require('./routes/api.js');
+const fccTestingRoutes = require('./routes/fcctesting.js');
+const runner = require('./test-runner');
+const PORT = process.env.PORT || 3000; 
+const NODE_ENV = process.env.NODE_ENV;
 
-var express     = require('express');
-var bodyParser  = require('body-parser');
-var expect      = require('chai').expect;
-var cors        = require('cors');
+const app = express();
 
-var apiRoutes         = require('./routes/api.js');
-var fccTestingRoutes  = require('./routes/fcctesting.js');
-var runner            = require('./test-runner');
-
-var app = express();
+app.use(helmet());
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
@@ -38,9 +42,9 @@ app.use(function(req, res, next) {
 });
 
 //Start our server and tests!
-app.listen(process.env.PORT || 3000, function () {
-  console.log("Listening on port " + process.env.PORT);
-  if(process.env.NODE_ENV==='test') {
+app.listen(PORT, function () {
+  console.log("Listening on port " + PORT);
+  if(NODE_ENV==='test') {
     console.log('Running Tests...');
     setTimeout(function () {
       try {
