@@ -27,18 +27,18 @@ mongo.connect(process.env.MONGODB_URI, { useNewUrlParser: true }, (err, client) 
   let db = client.db();
   err ? console.log('Database error: ' + err) : console.log('Successful database connection');
   
-    //Index page (static HTML)
+  // Index page (static HTML)
   app.route('/').get(function (req, res) {
     res.sendFile(process.cwd() + '/views/index.html');
   });
 
-  //For FCC testing purposes
+  // For FCC testing purposes
   fccTestingRoutes(app);
 
-  //Routing for API 
+  // Routing for API 
   apiRoutes(app, db);  
       
-  //404 Not Found Middleware
+  // 404 Not Found Middleware
   app.use(function(req, res, next) {
     res.status(404).type('text').send('Not Found');
   });
@@ -60,6 +60,7 @@ mongo.connect(process.env.MONGODB_URI, { useNewUrlParser: true }, (err, client) 
     }
   });
   
+
 
 });
 
