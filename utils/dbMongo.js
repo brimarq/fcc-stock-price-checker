@@ -3,32 +3,27 @@ require('dotenv').config(); // comment-out on Glitch
 const assert = require('assert');
 const MongoClient = require('mongodb').MongoClient;
 
+const promiseConnect = () => (
+  new Promise((resolve, reject) => (
+    MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true }, (err, client) => {
+      assert.equal(null, err);
+      // console.log("Connected correctly to MongoDB server");
+      resolve(client);
+    })
+  ))
+);
+
 module.exports = {
-	
-  /* 
-   * Mongo Utility: Connect to client */
 
-  connect: async () => (
-
-    client = await (
-      () => (new Promise((resolve, reject) => (
-
-        MongoClient.connect(process.env.MONGODB_URI, { useNewUrlParser: true }, 
-          (err, client) => {
-            assert.equal(null, err);
-            resolve(client);
-          }
-        )
-      )))
-    )()
-  ),
-
-  
-  /* 
-   * Mongo Utility: Close client */
+  connect: async () => {
+    let client = await (promiseConnect());
+    return client;
+  },
 
   close: async (client) => {
     client.close();
-    return true;
-  }
+    // console.log("Closed connection to MongoDB server");
+    return true; 
+  } 
+
 };
