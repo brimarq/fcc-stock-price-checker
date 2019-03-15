@@ -8,13 +8,18 @@ const helmet = require('helmet');
 const apiRoutes = require('./routes/api.js');
 const fccTestingRoutes = require('./routes/fcctesting.js');
 const runner = require('./test-runner');
-//const mongo = require('mongodb').MongoClient;
 const PORT = process.env.PORT || 3000; 
 const NODE_ENV = process.env.NODE_ENV;
 
 const app = express();
 
-app.use(helmet());
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+    styleSrc: ["'self'", "'unsafe-inline'"],
+    scriptSrc: ["'self'", "https://code.jquery.com", "'sha256-mY6n7Ke7vPE7tGzNRXNG3aS49eFLKJKl/7Qr2MJMODA='"],
+  }
+}));
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
